@@ -1,0 +1,14 @@
+{
+    "name": "NF.UnityLibs.Managers.AssetBundleManagement",
+    "rootNamespace": "NF.UnityLibs.Managers.AssetBundleManagement",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
