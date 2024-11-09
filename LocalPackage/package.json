@@ -1,0 +1,24 @@
+{
+  "name": "nf.unitylibs.managers.assetbundlemanagement",
+  "displayName": "nf.unitylibs.managers.assetbundlemanagement",
+  "author": { "name": "netpyoung", "url": "https://netpyoung.github.io/" },
+  "version": "0.0.1",
+  "unity": "",
+  "description": "desc",
+  "keywords": [],
+  "license": "MIT",
+  "category": "",
+  "dependencies": {
+  },
+  "samples": [
+  ],
+  "_upm": {
+    "supportedPlatforms": [
+      "Android",
+      "iOS"
+    ],
+    "changelog": "changelog"
+  },
+  "relatedPackages": {
+  }
+}
