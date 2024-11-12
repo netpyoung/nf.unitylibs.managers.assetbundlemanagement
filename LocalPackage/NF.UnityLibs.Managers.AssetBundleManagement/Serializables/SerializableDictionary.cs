@@ -5,7 +5,7 @@ using UnityEngine;
 namespace NF.UnityLibs.Managers.AssetBundleManagement.Serializables
 {
     [Serializable]
-    public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
+    internal sealed class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
     {
         [SerializeField]
         private List<TKey> _keys = new List<TKey>();

@@ -3,10 +3,10 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace NF.UnityLibs.Managers.AssetBundleManagement
+namespace NF.UnityLibs.Managers.AssetBundleManagement.Serializables
 {
     [Serializable]
-    public class SerializableConcurrentQueue<T> : ConcurrentQueue<T>, ISerializationCallbackReceiver
+    internal sealed class SerializableConcurrentQueue<T> : ConcurrentQueue<T>, ISerializationCallbackReceiver
     {
         [SerializeField]
         private List<T> serializedItems = new List<T>();
