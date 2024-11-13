@@ -13,7 +13,6 @@ namespace NF.UnityLibs.Managers.AssetBundleManagement
     [Serializable]
     public class AssetBundleManager : IDisposable
     {
-        public const string MANIFEST_NAME = "__ASSETBUNDLE";
         private bool _isDisposed = false;
         private HashSet<string> _assetBundleNameSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
@@ -24,7 +23,7 @@ namespace NF.UnityLibs.Managers.AssetBundleManagement
         private TaskQueueProcessor _taskQueueProcessor = new TaskQueueProcessor();
 
         [SerializeField]
-        private BundleFactory _bundleFactory = new BundleFactory();
+        internal BundleFactory _bundleFactory = new BundleFactory();
 
         private CancellationTokenSource _cts = new CancellationTokenSource();
         private CancellationToken _ct = CancellationToken.None;
@@ -41,7 +40,7 @@ namespace NF.UnityLibs.Managers.AssetBundleManagement
             _taskQueueProcessor.Dispose();
             _bundleFactory.Dispose();
 
-            if (_ab_AssetBundleManifestOrNull is not null)
+            if (_ab_AssetBundleManifestOrNull != null)
             {
                 _ab_AssetBundleManifestOrNull.Unload(true);
                 _ab_AssetBundleManifestOrNull = null;
@@ -50,11 +49,11 @@ namespace NF.UnityLibs.Managers.AssetBundleManagement
             _assetBundleNameSet.Clear();
         }
 
-        public virtual async Task<Exception?> InitAsync(string deviceBaseFpath)
+        public virtual async Task<Exception?> InitAsync(string deviceBaseDirFpath, string manifestName)
         {
             Assert.IsFalse(_isDisposed, "disposed");
 
-            string ab_AssetBundleManifestFpath = $"{deviceBaseFpath}/{MANIFEST_NAME}";
+            string ab_AssetBundleManifestFpath = $"{deviceBaseDirFpath}/{manifestName}";
             if (!File.Exists(ab_AssetBundleManifestFpath))
             {
                 return new AssetBundleManagerException(E_EXCEPTION_KIND.ERR_ON_INITIALIZE, $"!File.Exists({ab_AssetBundleManifestFpath})");
@@ -91,12 +90,12 @@ namespace NF.UnityLibs.Managers.AssetBundleManagement
                 _assetBundleNameSet.Add(bundleName);
             }
 
-            _taskQueueProcessor.Init(deviceBaseFpath, manifestOrNull!);
+            _taskQueueProcessor.Init(deviceBaseDirFpath, manifestOrNull!);
             _ct = _cts.Token;
             return null;
         }
 
-        public TaskBundle<T>? RentBundleOrNull<T>(string assetBundleName) where T : Object
+        public virtual TaskBundle<T>? RentBundleOrNull<T>(string assetBundleName) where T : Object
         {
             Assert.IsFalse(_isDisposed, "disposed");
 
@@ -110,7 +109,7 @@ namespace NF.UnityLibs.Managers.AssetBundleManagement
             return ret;
         }
 
-        public TaskBundleScene? RentBundleSceneOrNull(string assetBundleName)
+        public virtual TaskBundleScene? RentBundleSceneOrNull(string assetBundleName)
         {
             Assert.IsFalse(_isDisposed, "disposed");
 

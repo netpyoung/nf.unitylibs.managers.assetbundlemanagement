@@ -18,6 +18,11 @@ namespace NF.UnityLibs.Managers.AssetBundleManagement
             _task = _LoadTask(taskQueueProcessor, bundleFactory, assetBundleName, ct);
         }
 
+        internal TaskBundle(Bundle<T> bundle)
+        {
+            _task = Task.FromResult(bundle);
+        }
+
         private async Task<Bundle<T>> _LoadTask(TaskQueueProcessor taskQueueProcessor, BundleFactory bundleFactory, string assetBundleName, CancellationToken ct)
         {
             TaskQueueProcessor.TaskBundleLoad x = taskQueueProcessor.EnqueueTaskBundleLoad(assetBundleName);

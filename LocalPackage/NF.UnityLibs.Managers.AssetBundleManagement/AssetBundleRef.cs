@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Object = UnityEngine.Object;
@@ -21,7 +20,7 @@ namespace NF.UnityLibs.Managers.AssetBundleManagement
         private int _refCount = 0;
 
         [SerializeField]
-        private Object[] _unityObjects = Array.Empty<Object>();
+        internal Object[] _unityObjects = Array.Empty<Object>();
 
         [SerializeField]
         private AssetBundle? _assetBundleOrNull = null;
@@ -33,7 +32,7 @@ namespace NF.UnityLibs.Managers.AssetBundleManagement
         private string[] _dependencies;
 
         [SerializeField]
-        private E_ASSETBUNDLEREF_STATE _state;
+        internal E_ASSETBUNDLEREF_STATE _state;
 
         private AssetBundleCreateRequest? _assetBundleCreateRequest;
         private AssetBundleRequest? _assetBundleRequest;
