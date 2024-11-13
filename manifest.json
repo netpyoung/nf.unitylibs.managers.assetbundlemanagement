@@ -11,6 +11,159 @@
       }
     },
     {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NF.UnityLibs.Managers.AssetBundleManagement.AssetBundleManager.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/NF.UnityLibs.Managers.AssetBundleManagement.AssetBundleManager.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NF.UnityLibs.Managers.AssetBundleManagement.AssetBundleManagerException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/NF.UnityLibs.Managers.AssetBundleManagement.AssetBundleManagerException.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NF.UnityLibs.Managers.AssetBundleManagement.AssetBundleRef.E_ASSETBUNDLEREF_STATE.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/NF.UnityLibs.Managers.AssetBundleManagement.AssetBundleRef.E_ASSETBUNDLEREF_STATE.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NF.UnityLibs.Managers.AssetBundleManagement.AssetBundleRef.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/NF.UnityLibs.Managers.AssetBundleManagement.AssetBundleRef.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NF.UnityLibs.Managers.AssetBundleManagement.Bundle-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/NF.UnityLibs.Managers.AssetBundleManagement.Bundle-1.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NF.UnityLibs.Managers.AssetBundleManagement.Bundle.E_BUNDLE_STATE.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/NF.UnityLibs.Managers.AssetBundleManagement.Bundle.E_BUNDLE_STATE.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NF.UnityLibs.Managers.AssetBundleManagement.Bundle.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/NF.UnityLibs.Managers.AssetBundleManagement.Bundle.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NF.UnityLibs.Managers.AssetBundleManagement.BundleScene.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/NF.UnityLibs.Managers.AssetBundleManagement.BundleScene.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NF.UnityLibs.Managers.AssetBundleManagement.E_EXCEPTION_KIND.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/NF.UnityLibs.Managers.AssetBundleManagement.E_EXCEPTION_KIND.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NF.UnityLibs.Managers.AssetBundleManagement.Editors.EditorAssetBundleHelper.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/NF.UnityLibs.Managers.AssetBundleManagement.Editors.EditorAssetBundleHelper.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NF.UnityLibs.Managers.AssetBundleManagement.Editors.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/NF.UnityLibs.Managers.AssetBundleManagement.Editors.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NF.UnityLibs.Managers.AssetBundleManagement.TaskBundle-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/NF.UnityLibs.Managers.AssetBundleManagement.TaskBundle-1.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NF.UnityLibs.Managers.AssetBundleManagement.TaskBundleScene.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/NF.UnityLibs.Managers.AssetBundleManagement.TaskBundleScene.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NF.UnityLibs.Managers.AssetBundleManagement.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/NF.UnityLibs.Managers.AssetBundleManagement.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api/toc.yml",
+      "output": {
+        ".json": {
+          "relative_path": "api/toc.json"
+        },
+        ".html": {
+          "relative_path": "api/toc.html"
+        }
+      },
+      "version": ""
+    },
+    {
       "type": "Conceptual",
       "source_relative_path": "docs/index.md",
       "output": {
