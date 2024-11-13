@@ -43,6 +43,15 @@ namespace NF.UnityLibs.Managers.AssetBundleManagement.Impl
             Assert.IsTrue(isSuccess, $"_dic_RentedBundle.TryAdd({bundle.BundleUID}, bundle)");
             return bundle;
         }
+        
+        public BundleScene GetBundleSceneFromAssetBundleRef(AssetBundleRef assetBundleRef)
+        {
+            uint bundleUid = _GetBundleUid();
+            BundleScene bundle = new BundleScene(bundleUid, assetBundleRef);
+            bool isSuccess = _dic_RentedBundle.TryAdd(bundle.BundleUID, bundle);
+            Assert.IsTrue(isSuccess, $"_dic_RentedBundle.TryAdd({bundle.BundleUID}, bundle)");
+            return bundle;
+        }
 
         public void PrepareReturn(Bundle bundle)
         {
