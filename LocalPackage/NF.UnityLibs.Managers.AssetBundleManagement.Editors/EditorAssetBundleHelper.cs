@@ -13,6 +13,7 @@ namespace NF.UnityLibs.Managers.AssetBundleManagement.Editors
     {
         public const string ASSETBUNDLE_DIR_ASSETPATH = "Assets/@AssetBundle";
         public const string OUT_BASE_DIR_NAME = "__ASSETBUNDLE";
+        public const string MANIFEST_NAME = OUT_BASE_DIR_NAME;
 
         [MenuItem("@NFV2/AssetBundles/TaggingAssetName")]
         public static void TaggingAssetName()
@@ -46,6 +47,7 @@ namespace NF.UnityLibs.Managers.AssetBundleManagement.Editors
                 AssetDatabase.Refresh();
             }
         }
+
         [MenuItem("@NFV2/AssetBundles/BuildVersion0")]
         public static void BuildVersion0()
         {
@@ -68,6 +70,19 @@ namespace NF.UnityLibs.Managers.AssetBundleManagement.Editors
                 }
                 return;
             }
+        }
+
+        [MenuItem("@NFV2/AssetBundles/BuildVersion0 - OpenDirectory")]
+        public static void BuildVersion0_OpenDirectory()
+        {
+            BuildTarget buildTarget = EditorUserBuildSettings.activeBuildTarget;
+            string outBaseDirName = OUT_BASE_DIR_NAME;
+            int version = 0;
+            string outBaseBuildDirFPath = Path.GetFullPath(Path.Combine(Application.dataPath, "..", outBaseDirName));
+            string outBuildDirFPath = Path.Combine(outBaseBuildDirFPath, buildTarget.ToString(), version.ToString(), MANIFEST_NAME).Replace('\\', '/');
+            
+            Debug.Log(outBuildDirFPath);
+            EditorUtility.RevealInFinder(outBuildDirFPath);
         }
 
         public static string GetAssetBundleNameFromAssetPath(string inAssetBundleDirAssetPath, string assetPath)
@@ -111,11 +126,22 @@ namespace NF.UnityLibs.Managers.AssetBundleManagement.Editors
                 {
                     Directory.CreateDirectory(outBuildDirFPath);
                     manifest = BuildPipeline.BuildAssetBundles(buildParams);
+
+
+                    string manifestFpath_Version = Path.Combine(outBuildDirFPath, $"{version}");
+                    string manifestFpath_Version_manifest = Path.Combine(outBuildDirFPath, $"{version}.manifest");
+                    string manifestFpath_MANIFEST_NAME = Path.Combine(outBuildDirFPath, $"{MANIFEST_NAME}");
+                    string manifestFpath_MANIFEST_NAME_manifest = Path.Combine(outBuildDirFPath, $"{MANIFEST_NAME}.manifest");
+                    File.Copy(manifestFpath_Version, manifestFpath_MANIFEST_NAME, overwrite: true);
+                    File.Copy(manifestFpath_Version_manifest, manifestFpath_MANIFEST_NAME_manifest, overwrite: true);
+                    File.Delete(manifestFpath_Version);
+                    File.Delete(manifestFpath_Version_manifest);
                 }
                 catch (Exception ex)
                 {
                     return ex;
                 }
+
                 BuildReport report = BuildReport.GetLatestReport();
                 if (report != null)
                 {
