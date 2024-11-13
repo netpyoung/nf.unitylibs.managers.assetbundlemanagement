@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Object = UnityEngine.Object;
@@ -34,6 +35,8 @@ namespace NF.UnityLibs.Managers.AssetBundleManagement
         [SerializeField]
         private E_ASSETBUNDLEREF_STATE _state;
 
+        private AssetBundleCreateRequest? _assetBundleCreateRequest;
+        private AssetBundleRequest? _assetBundleRequest;
         public AssetBundle? AssetBundleOrNull => _assetBundleOrNull;
         public string Name => _name;
         public string[] Dependencies => _dependencies;
@@ -45,6 +48,30 @@ namespace NF.UnityLibs.Managers.AssetBundleManagement
             {
                 Assert.AreEqual(E_ASSETBUNDLEREF_STATE.LOADED, _state, $"_state should be LOADED : {_state}");
                 return _unityObjects;
+            }
+        }
+
+        public float Progress
+        {
+            get
+            {
+                if (_assetBundleOrNull is not null)
+                {
+                    return 1;
+                }
+
+                if (_assetBundleCreateRequest is null)
+                {
+                    return 0;
+                }
+
+                float progress = _assetBundleCreateRequest.progress / 2.0f;
+                if (_assetBundleRequest is not null)
+                {
+                    progress += _assetBundleRequest.progress / 2.0f;
+                }
+
+                return progress;
             }
         }
 
@@ -103,6 +130,20 @@ namespace NF.UnityLibs.Managers.AssetBundleManagement
                 _unityObjects = unityObjectsOrNull!;
                 _state = E_ASSETBUNDLEREF_STATE.LOADED;
             };
+
+            _assetBundleRequest = abr;
+        }
+
+        internal void LoadAssetBundleRequest(string assetBundleFpath, Action<AssetBundle> act)
+        {
+            AssetBundleCreateRequest abcr = AssetBundle.LoadFromFileAsync(assetBundleFpath);
+            abcr.completed += (AsyncOperation ao) =>
+            {
+                AssetBundle bundle = abcr.assetBundle;
+                Assert.IsNotNull(bundle, $"abcr.assetBundle is null. {_name}, {assetBundleFpath}");
+                act(bundle);
+            };
+            _assetBundleCreateRequest = abcr;
         }
     }
 }
