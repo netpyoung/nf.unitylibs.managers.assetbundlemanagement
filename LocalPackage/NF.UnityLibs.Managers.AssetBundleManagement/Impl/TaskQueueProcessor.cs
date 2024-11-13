@@ -26,12 +26,12 @@ namespace NF.UnityLibs.Managers.AssetBundleManagement.Impl
         private SerializableConcurrentQueue<AssetBundle> _queue_AssetBundle_LoadCompleted = new SerializableConcurrentQueue<AssetBundle>();
 
         [SerializeField]
-        private SerializableDictionary<string, AssetBundleRef> _dic_AssetBundleRef_Loaded = new SerializableDictionary<string, AssetBundleRef>(100);
+        private SerializableDictionary<string, AssetBundleRef> _dic_AssetBundleRef_Loaded = new SerializableDictionary<string, AssetBundleRef>(100, StringComparer.OrdinalIgnoreCase);
 #else
         private readonly ConcurrentQueue<TaskBundleLoad> _queue_TaskBundleLoad_Requested = new ConcurrentQueue<TaskBundleLoad>();
         private readonly ConcurrentQueue<TaskBundleUnload> _queue_TaskBundleUnload_Requested = new ConcurrentQueue<TaskBundleUnload>();
         private readonly ConcurrentQueue<AssetBundle> _queue_AssetBundle_LoadCompleted = new ConcurrentQueue<AssetBundle>();
-        private readonly Dictionary<string, AssetBundleRef> _dic_AssetBundleRef_Loaded = new Dictionary<string, AssetBundleRef>(100);
+        private readonly Dictionary<string, AssetBundleRef> _dic_AssetBundleRef_Loaded = new Dictionary<string, AssetBundleRef>(100, StringComparer.OrdinalIgnoreCase);
 #endif // UNITY_EDITOR
 
         private readonly List<TaskBundleLoad> _list_TaskBundleLoad_Requested = new List<TaskBundleLoad>();
@@ -149,7 +149,7 @@ namespace NF.UnityLibs.Managers.AssetBundleManagement.Impl
 
                     if (isAllDepdenciesLoaded)
                     {
-                        t.SetAssetBundleRef(mainAssetBundleRef);
+                        t.MarkAsComplete(mainAssetBundleRef);
                         _list_TaskBundleLoad_Loaded.Add(t);
                     }
                 }
@@ -222,14 +222,14 @@ namespace NF.UnityLibs.Managers.AssetBundleManagement.Impl
 
                 if (mainAssetBundleRef.State == AssetBundleRef.E_ASSETBUNDLEREF_STATE.LOADED)
                 {
-                    t.SetAssetBundleRef(mainAssetBundleRef);
+                    t.MarkAsComplete(mainAssetBundleRef);
                     return true;
                 }
 
                 return false;
             }
 
-            AssetBundleRef newAssetBundleRef = __RegisterAssetBundleRef(mainAssetBundleName);
+            AssetBundleRef newAssetBundleRef = __RegisterAssetBundleRef(t, mainAssetBundleName, isMain: true);
             foreach (string dep in newAssetBundleRef.Dependencies)
             {
                 if (_dic_AssetBundleRef_Loaded.TryGetValue(dep, out AssetBundleRef depAssetBundleRef))
@@ -238,14 +238,14 @@ namespace NF.UnityLibs.Managers.AssetBundleManagement.Impl
                 }
                 else
                 {
-                    __RegisterAssetBundleRef(dep);
+                    __RegisterAssetBundleRef(t, dep, isMain: false);
                 }
             }
 
             return false;
         }
 
-        private AssetBundleRef __RegisterAssetBundleRef(string assetBundleName)
+        private AssetBundleRef __RegisterAssetBundleRef(TaskBundleLoad t, string assetBundleName, bool isMain)
         {
             string[] dependencies = _assetBundleManifest.GetAllDependencies(assetBundleName);
             AssetBundleRef assetBundleRef = new AssetBundleRef(assetBundleName, dependencies);
@@ -254,14 +254,14 @@ namespace NF.UnityLibs.Managers.AssetBundleManagement.Impl
             string assetBundleFpath = $"{_deviceBaseFpath}/{assetBundleName}";
             Assert.IsTrue(File.Exists(assetBundleFpath), $"assetBundleFpath {assetBundleFpath} does not exist");
             
-            AssetBundleCreateRequest abcr = AssetBundle.LoadFromFileAsync(assetBundleFpath);
-            abcr.completed += (AsyncOperation ao) =>
-            {
-                AssetBundle bundle = abcr.assetBundle;
-                Assert.IsNotNull(bundle, $"abcr.assetBundle is null. {assetBundleName}");
-                _queue_AssetBundle_LoadCompleted.Enqueue(bundle);
-            };
+            assetBundleRef.LoadAssetBundleRequest(assetBundleFpath, __EnqueueAssetBundleAfterAssetBundleLoadFromFile);
+            t.SetAssetBundleRef(assetBundleName, assetBundleRef, isMain);
             return assetBundleRef;
+        }
+
+        private void __EnqueueAssetBundleAfterAssetBundleLoadFromFile(AssetBundle assetBundle)
+        {
+            _queue_AssetBundle_LoadCompleted.Enqueue(assetBundle);
         }
     }
 }

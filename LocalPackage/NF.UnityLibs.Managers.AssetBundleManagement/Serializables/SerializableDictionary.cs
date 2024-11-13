@@ -12,6 +12,10 @@ namespace NF.UnityLibs.Managers.AssetBundleManagement.Serializables
         [SerializeField]
         private List<TValue> _values = new List<TValue>();
 
+        public SerializableDictionary(int capacity, IEqualityComparer<TKey> comparer) : base(capacity, comparer)
+        {
+        }
+
         public SerializableDictionary(int capacity) : base(capacity)
         {
         }

@@ -3,6 +3,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -24,6 +25,9 @@ namespace NF.UnityLibs.Managers.AssetBundleManagement
 
         [SerializeField]
         private BundleFactory _bundleFactory = new BundleFactory();
+
+        private CancellationTokenSource _cts = new CancellationTokenSource();
+        private CancellationToken _ct = CancellationToken.None;
 
         public void Dispose()
         {
@@ -59,6 +63,10 @@ namespace NF.UnityLibs.Managers.AssetBundleManagement
             AssetBundleCreateRequest abcr = AssetBundle.LoadFromFileAsync(ab_AssetBundleManifestFpath);
             while (!abcr.isDone)
             {
+                if (_ct.IsCancellationRequested)
+                {
+                    return new AssetBundleManagerException(E_EXCEPTION_KIND.ERR_ON_INITIALIZE, $"_ct.IsCancellationRequested");
+                }
                 await Task.Yield();
             }
 
@@ -84,10 +92,11 @@ namespace NF.UnityLibs.Managers.AssetBundleManagement
             }
 
             _taskQueueProcessor.Init(deviceBaseFpath, manifestOrNull!);
+            _ct = _cts.Token;
             return null;
         }
 
-        public async Task<Bundle<T>?> RentBundleOrNull<T>(string assetBundleName) where T : Object
+        public TaskBundle<T>? RentBundleOrNull<T>(string assetBundleName) where T : Object
         {
             Assert.IsFalse(_isDisposed, "disposed");
 
@@ -97,9 +106,22 @@ namespace NF.UnityLibs.Managers.AssetBundleManagement
                 return null;
             }
 
-            AssetBundleRef assetBundleRef = await _taskQueueProcessor.EnqueueTaskBundleLoad(assetBundleName);
-            Bundle<T> bundle = _bundleFactory.GetBundleFromAssetBundleRef<T>(assetBundleRef);
-            return bundle;
+            TaskBundle<T> ret = new TaskBundle<T>(_taskQueueProcessor, _bundleFactory, assetBundleName, _ct);
+            return ret;
+        }
+
+        public TaskBundleScene? RentBundleSceneOrNull(string assetBundleName)
+        {
+            Assert.IsFalse(_isDisposed, "disposed");
+
+            if (!_assetBundleNameSet.Contains(assetBundleName))
+            {
+                Debug.LogError($"!_assetBundleNameSet.Contains(\"{assetBundleName}\")");
+                return null;
+            }
+
+            TaskBundleScene ret = new TaskBundleScene(_taskQueueProcessor, _bundleFactory, assetBundleName, _ct);
+            return ret;
         }
 
         public virtual async Task ReturnBundleAsync(Bundle bundle)
